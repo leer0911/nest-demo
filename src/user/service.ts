@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
+import { PaginationQueryDto } from '@/common/dto/pagination-query.dto';
 import { User } from './schema';
 import { CreateUserDto } from './dto/create.dto';
 import { UpdateUserDto } from './dto/update.dto';
@@ -16,8 +17,11 @@ export class UserService {
     return await this.UserModel.create({ password: finalPassword, ...rest });
   }
 
-  async findAll() {
-    return await this.UserModel.find();
+  async findAll(paginationQuery: PaginationQueryDto) {
+    const { limit, offset } = paginationQuery;
+    const list = await this.UserModel.find().skip(offset).limit(limit).exec();
+    const total = await this.UserModel.count();
+    return { list, total };
   }
 
   async findOne(id: string) {
