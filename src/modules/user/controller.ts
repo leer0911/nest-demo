@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { PaginationQueryDto } from '@/common/dto/pagination-query.dto';
+import { PaginationDto } from '@/shared/dto/pagination-query.dto';
 import { UserService } from './service';
 import { CreateUserDto } from './dto/create.dto';
 import { UpdateUserDto } from './dto/update.dto';
@@ -16,7 +16,7 @@ export class UserController {
   }
 
   @Get()
-  async findAll(@Query() query: PaginationQueryDto) {
+  async findAll(@Query() query: PaginationDto) {
     return this.userService.findAll(query);
   }
 
